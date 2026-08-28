@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class Solution {
+
+    static long[] maxSubarray(int[] arr) {
+        long maxSub = arr[0];      // Kadane's algorithm (contiguous)
+        long current = arr[0];
+
+        long maxSeq = 0;           // subsequence sum (non-contiguous)
+        int maxElement = arr[0];
+
+        for (int x : arr) {
+            // subsequence: sum of positives
+            if (x > 0) {
+                maxSeq += x;
+            }
+            if (x > maxElement) {
+                maxElement = x;
+            }
+
+            // subarray (Kadane)
+            current = Math.max(x, current + x);
+            maxSub = Math.max(maxSub, current);
+        }
+
+        // if all numbers are non-positive, subsequence is the maximum element
+        if (maxSeq == 0) {
+            maxSeq = maxElement;
+        }
+
+        return new long[]{maxSub, maxSeq};
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++) {
+                arr[i] = sc.nextInt();
+            }
+
+            long[] result = maxSubarray(arr);
+            System.out.println(result[0] + " " + result[1]);
+        }
+    }
+}
